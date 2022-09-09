@@ -241,6 +241,225 @@ czy_Parzysta(8989)
 
 
 
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+
+```{r}
+# LAB 6
+
+# Ćwiczenie 1
+  # k1
+  # k3
+  install.packages("dplyr")
+  install.packages("tidyr")
+  
+# Ćwiczenie 1
+  # k1
+  install.packages("PogromcyDanych")
+  library(dplyr)
+  library(PogromcyDanych)
+  tmp <- filter(auta2012, Marka == "Porsche")
+  head(tmp)
+  # k2
+  library(dplyr)
+  library(PogromcyDanych)
+  tmp <- filter(auta2012, Marka == "Porsche", KM > 300, Cena.w.PLN > 500)
+  head(tmp)
+  # k3
+  library(dplyr)
+  library(PogromcyDanych)
+  tmp <- select(auta2012, Marka, Rok.produkcji)
+  head(tmp)
+  # k4
+  tmp <- select(auta2012, starts_with("Cena"))
+  head(tmp)
+  # k5
+  library(dplyr)
+  library(PogromcyDanych)
+  
+  WiekAuta <- mutate(auta2012, Wiek.auta = 2010 - Rok.produkcji)
+  head(WiekAuta[,c("Wiek.auta", "Rok.produkcji")])
+  # k6
+  library(dplyr)
+  library(PogromcyDanych)
+  
+  sortowanieAut <- arrange(auta2012, Model, Cena.w.PLN)
+  head(select(sortowanieAut, Model, Marka, Cena.w.PLN, Cena, Waluta))
+  # k7
+  auta2012 %>% 
+    summarise(sredniaCena = mean(Cena.w.PLN), sdCena = sqrt(var(Cena.w.PLN)), medianaPrzebiegu = median(Przebieg.w.km, na.rm = TRUE))
+  # k8
+  auta2012 %>%
+    filter(Marka == "Volkswagen", Rok.produkcji == 2007) %>%
+      group_by(Rodzaj.paliwa) %>%
+        summarise(medianaCeny = median(Cena.w.PLN, na.rm = TRUE), medianaPrzebieg = median(Przebieg.w.km, na.rm = TRUE), liczba = n())
+
+# ZADANIA
+  # z1
+  auta2012
+  # z2
+  auta2012 %>%
+    count(Marka, sort = TRUE) # Volkswagen
+  # z3
+  auta2012 %>%
+    filter(Marka == "Toyota") %>%
+      count(Model, sort = TRUE) # Yaris
+  # z4
+  autaMlode <- filter(auta2012, Rok.produkcji > 2010)
+  # z5
+  autaMlode %>%
+    filter(Marka == "Fiat", Model == "500") %>%
+      count(Model) # 48
+  # z6
+  auta2012 %>%
+    filter(Marka == "Rolls-Royce") %>%
+      arrange(Cena.w.PLN)
+  # z7
+  auta2012 %>%
+    filter(Marka == "Rolls-Royce", Model == "Phantom") %>%
+      arrange(Cena.w.PLN)
+  # z8
+  auta2012 %>%
+    filter(Marka == "Volkswagen") %>%
+      arrange(Cena.w.PLN) %>%
+        head(5)
+  # z9
+  auta2012 %>%
+    filter(Marka == "Volkswagen") %>%
+      arrange(desc(Pojemnosc.skokowa)) %>%
+        head(3)
+  # z10
+  auta2012 %>%
+    filter(Marka == "Volvo", Kolor == "zielony") %>%
+      arrange(desc(Pojemnosc.skokowa)) %>%
+        select(Marka, Cena.w.PLN, Kolor)
+  # z11
+  auta2012 %>%
+    select(ends_with("l"))
+  # z12
+  auta2012 %>%
+    select(ends_with("a"))
+  # z13
+  auta2012 %>%
+    transmute(sredni_przebieg = (Przebieg.w.km/(2012-Rok.produkcji)), Marka, Model) # przyjmując, że jest 2012 rok
+  # średni przebieg per samochód
+  # z14
+  auta2012 %>%
+    filter(Marka == "Volvo") %>%
+      transmute(sredni_przebieg = (Przebieg.w.km/(2012-Rok.produkcji)), Marka, sredniaCena = mean(Cena.w.PLN))
+  # z15
+  auta2012 %>%
+    filter(Marka == "Volkswagen", Model == "Golf") %>%
+      group_by(Kraj.aktualnej.rejestracji, srednia = mean(Cena.w.PLN))
+  # z16
+  auta2012 %>%
+    filter(Marka == "Peugeot", Model == "106") %>%
+      group_by(Rok.produkcji) %>%
+        transmute(srednia_cena = mean(Cena.w.PLN))
+  # z17
+  auta2012 %>%
+    filter(Marka == "Seat", Model == "Leon", Kolor == "czarny", Cena.w.PLN < 10000) %>%
+    arrange(Cena.w.PLN)
+  
+```
+
+
+# LAB 5
+
+```{r}
+# Ćwiczenie 1
+  # k1
+  matrix(c(1, 3, 4, -1, 2, 4, 3, 2, 1), ncol = 3, nrow = 3)
+  # k2
+  matrix(c(2, 3, 1, -1, 2, 3, 3, -2, 2), ncol = 3, nrow = 3, byrow = TRUE)
+  # k3
+  macierz3 <- matrix(c(2, 3, 1, 3), ncol = 2, nrow = 2, byrow = TRUE)
+  macierz4 <- matrix(c(-1, 2, -2, 4), ncol = 2, nrow = 2, byrow = TRUE)
+  print(macierz3 %*% macierz4)
+  # k4 zad1.
+  outer(1:3, 1:5)
+  outer(rep(7, 3), c(3, 1, 2))
+  # k4 zad2.
+  outer(1:3, 1:5, "+")
+  outer(1:3, 1:5, function(x, y) log(x^2+y^2))
+  # k5 zad1.
+  ciag=1:10
+  matrix(ciag, 2, 5, dimnames=list(c("rząd1", "rząd2"), c("kol1", "kol2", "kol3", "kol4", "kol5")))
+  # k5 zad2.
+  macierz = matrix(1:10, 2, 5, dimnames=list(c("rząd1", "rząd2"), c("kol1", "kol2", "kol3", "kol4", "kol5")))
+  macierz["rząd2", "kol3"]
+  # k6 zad1.
+  macierz = matrix(1:9, 3, 3)
+  macierz
+  macierz[1,] = c (7, 6, 5)
+  macierz
+  macierz[,1] = c (7, 6, 5)
+  macierz
+  # k6 zad2.
+  macierz = matrix(1:9, 3, 3)
+  macierz
+  macierz1 = macierz[c(1, 3),]
+  macierz1
+  macierz2 = macierz[-2,]
+  macierz2
+ # k6 zad3.
+  macierz3 = macierz[,c(1, 3)]
+  macierz3
+  macierz4 = macierz[,-2]
+  macierz4
+# Zadania
+  # zad1.1
+  mac1 = matrix(15:23, 3, 3)
+  mac2 = matrix(3:11, 3, 3)
+  # a
+  det(mac1)
+  # b
+  mac3 = mac1 %*% mac2
+  mac3
+  # c
+  t(mac2)
+  # d
+  mac1[2,] = c(30, 31, 32)
+  mac1
+  # e
+  mac2[,3]
+# Ćwiczenie 2
+  # k1
+  imiona    <- c("Ania", "Kasia", "Janek", "Borys")
+  wiek      <- c(8, 5, 3, 9)
+  lubiaLody <- c(TRUE, TRUE, FALSE, TRUE)
+  dzieci    <- data.frame(imiona, wiek, lubiaLody)
+  dzieci
+  # zad1.
+  # a
+  dzieci[1,1]
+  # b
+  dzieci[2:4, c(1, 3)]
+  # c
+  dzieci[1,]
+  # d
+  dzieci[1]
+
+```
+
+
 
 
 # LAB4
