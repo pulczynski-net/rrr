@@ -1,8 +1,13 @@
 # rrr
 rrr
 
+---
+title: "HOTELE"
+output: HOTELE
+---
 
 #1 Utwórz wektor i nazwij go zarobki. Przypisz do niego następujące wartości: 2300, 1800, 4500, 3700, 1300, 7200, 6100. Nazwij każdy element wektora dowolnym imieniem. Wyświetl wektor z nazwanymi elementami, najmniejszą wartość, jego długość i oblicz średnią wartość.
+
 ```{r}
 zarobki <- c(jan=2300, tomek=1800, maciek=4500, grzegorz=3700, bartek=1300, kacper=7200, janusz=6100)
 zarobki
@@ -17,36 +22,47 @@ hotele
 ```
 #3 Z ramki danych hotele wyświetl: •3 pierwsze wiersze, •3 ostatnie wiersze, •nazwy wszystkich kolumn.
 ```{r}
+hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 head(hotele,3)
 tail(hotele,3)
 names(hotele)
 ```
 #4 Wyświetl dane dla kolumny „Gender” z obiektu hotele.
 ```{r}
+hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 gener <- hotele %>%
   select(Gender)
 gener
 ```
 #5 Wyświetl informację, czy wartości z kolumny „Cleanliness” są równe bądź większe od 3.
 ```{r}
+hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 clean <- hotele %>%
     mutate(isCleanliness=if_else(Cleanliness>=3,"tak","nie"))
 clean
 ```
 #6 Oblicz średni wynik dla kolumny „Food.and.drink” i zaokrąglij go do dwóch miejsc po przecinku.
 ```{r}
+hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 sredni <- hotele %>%
   summarise(sredni_wynik=round(mean(Food.and.drink),2))
 sredni
 ```
 #7 Uporządkuj dane według kolumny „pupose_of_travel”.
 ```{r}
+hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 uporz <- hotele %>%
   arrange(purpose_of_travel)
+uporz
+# lub jeśli chodzi o uporządkowanie inaczej grupowanie to:
+uporz <- hotele %>%
+  group_by(purpose_of_travel) %>%
+  summarise(liczebnosc=n())
 uporz
 ```
 #8 Wyświetl liczebność według danych z kolumny „Type.Of.Booking” i zapisz to do wektora, który nazwiesz swoim nazwiskiem.
 ```{r}
+hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 wektor<-hotele%>%
   group_by(Type.Of.Booking)%>%
  summarise(liczba=n())%>%
@@ -56,14 +72,16 @@ pulczynski
 ```
 #9 Przygotuj wykres kolumnowy przedstawiający liczebność danych z kolumny „Stay.comfort”. Wstaw tytuł wykresu, nazwij osie, ustaw różne kolory dla poszczególnych słupków. Wygeneruj plik graficzny z wykresem.
 ```{r}
+hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 wykres<-hotele%>%
   group_by(Stay.comfort)%>%
  summarise(liczba=n())
 wykres
-barplot(wykres$liczba, main = "Stay.comfort", ylab="responses", ylim = c(0,35000),col=c("red", "green", "blue","orange","pink", "yellow"), names.arg = c("0","1","2","3","4","5") )
+barplot(wykres$liczba, main = "Stay.comfort", ylab="responses",xlab="liczebnosc", ylim = c(0,35000),col=c("red", "green", "blue","orange","pink", "yellow"), names.arg = c("0","1","2","3","4","5") )
 ```
 #10 W nazwach kolumn w obiekcie hotele zamień „.” na „_”, wykorzystując funkcję gsub.
 ```{r}
+hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 colnames(hotele) <- gsub("\\.+", "_", colnames(hotele))
 hotele
 ```
@@ -95,10 +113,9 @@ czyNieparzysta(11)
 title: Wino
 output: html_notebook
 ---
-
-
-```{r}
 #1. Utwórz wektor i nazwij go swoim nazwiskiem. Przypisz do niego następujące wartości: 23,12, 49, 9, -4, 51, 83. Wyświetl zakres wektora, jego długość, a także najmniejszą i największą wartość.
+```{r}
+
 
 pulczynski=c(23,12, 49, 9, -4, 51, 83) #za mopomąca funkcji c() tworzymy wektor 
 pulczynski                         # wypisujemy wektor
@@ -107,29 +124,33 @@ min(pulczynski)                # najmniejsza wartość.
 max(pulczynski)               #  największa wartość
 ```
 
-
-```{r}
 # 2. Utwórz listę i nazwij ją desery. Przypisz do niej nazwę ciasta (szarlotka), jego liczbę kalorii w 100 g (265 kcal) i informację o zawartości cynamonu (prawda). Wyświetl informację o liczbie kalorii. Usuń kategorię dotyczącą zawartości cynamonu. Dodaj kategorię dodatki i zapisz do niej lody waniliowe. 
+```{r}
+
 
 desery=list(ciasta="szarlotka", liczbe_kalorii="w 100g 265kcal", zawartosc_cynamonu=TRUE)
 desery$liczbe_kalorii             # za pomocą $ odwoluje się do liczba_kalorij i wwyświetlam informacje 
 desery$zawartosc_cynamonu=NULL    #usuwam kategorię dotyczącą zawartości cynamonu
 desery$dodatki="lody waniliowe"   # dodaje nową kategorjie do listy 
-desery                            # wypisuje liste dla sprawdzania 
+desery                         # wypisuje liste dla sprawdzania 
 ```
 
-
-```{r}
 #3. Wczytaj dołączony plik wine_red.csv do obiektu o nazwie wino.
+#4 nazwy kolumn dla ramki danych wino , pierwsze wiersze ramki danych wino ,kolumnę pH z ramki danych wino
+```{r}
+
 #pakiety potrzebne do przetwarzania danych
 #install.packages("dplyr")
 #install.packages("tidry")
 
-wino<-read.table(file="C:/.../winequality-red.csv", sep=",", dec=".",header=TRUE) #Wczytaj dołączony plik
-#4 
-names(wino)     #nazwy kolumn dla ramki danych wino
-head(wino,4)     #4 pierwsze wiersze ramki danych wino
-select(wino,pH) #kolumnę pH z ramki danych wino
+wino<-read.table(file="C:\\Users\\barto\\Desktop\\wine_red.csv", sep=";", dec=".",header=TRUE) #Wczytaj dołączony plik
+wino
+
+names(wino)     
+head(wino,4)     
+phh <- wino %>%
+  select(pH)
+phh
 
 sulfur<-wino%>%     #informację, czy wartości z kolumny „total.sulfur.dioxide” są większe od 40.
   mutate(większa_od_40=if_else(total.sulfur.dioxide>40, "tak", "nie")) #dodaje nową kolumne gdzie zapiszę tak nie jeżeli zawartość total.sulfur.dioxide>40
@@ -137,66 +158,76 @@ sulfur
 
 ```
 
-
-```{r}
 #5. Oblicz średni poziom alkoholu w winach z ramki danych wino
+```{r}
+
+wino<-read.table(file="C:\\Users\\barto\\Desktop\\wine_red.csv", sep=";", dec=".",header=TRUE)
 
 srednia<-wino%>%            
-summarise(mean(alcohol))
+summarise(srednia=round(mean(alcohol),2))
 srednia
 
 ```
-```{r}
 #6. Posortuj dane według podanych instrukcji, wykorzystują odpowiednie funkcje.
 #Uporządkuj dane z kolumny „residual.sugar” (średni wynik) według zawartości wody (kolumna "citric.acid”)
-wino%>%
-  group_by(citric.acid,residual.sugar)%>%
-  summarise(liczba=n())
 #Uporządkuj dane z obiektu owoce według kolumny „chlorides”
+```{r}
+
+wino<-read.table(file="C:\\Users\\barto\\Desktop\\wine_red.csv", sep=";", dec=".",header=TRUE)
 wino%>%
-  group_by(chlorides)%>%
-  summarise(liczba=n())
-# arrange(chlorides) ???
+   group_by(citric.acid)%>%
+  #group_by(citric.acid) %>%
+  summarise(srednia=round(mean(residual.sugar),2))
+
+wino%>%
+ # group_by(chlorides)%>%
+ # summarise(liczba=n())
+  arrange(chlorides) #to jest sortowanie 
   
 ```
 
-
-```{r}
 #7. Wyświetl liczebność win według danych z kolumny „quality”.
+```{r}
+
+wino<-read.table(file="C:\\Users\\barto\\Desktop\\wine_red.csv", sep=";", dec=".",header=TRUE)
 wino%>%
   group_by(quality)%>%
   summarise(liczba=n()) 
 
+
 ```
-```{r}
 #8. Przygotuj wykres kolumnowy przedstawiający dane z kolumny „quality”. Wstaw tytuł wykresu, nazwij osie,ustaw różne kolory dla poszczególnych słupków.
+```{r}
+
+wino<-read.table(file="C:\\Users\\barto\\Desktop\\wine_red.csv", sep=";", dec=".",header=TRUE)
 wykres<-wino%>%
   group_by(quality)%>%
   summarise(liczba=n()) 
-barplot(wykres$liczba, main = "Quality", ylab= "Ilosć", names.arg=c(wykres$quality), col=c("red", "green", "blue","orange","pink", "yellow") ) 
+
+barplot(wykres$liczba, main = "Liczebność według quality", ylab= "Ilosć",xlab="quality", names.arg=c(wykres$quality), col=c("red", "green", "blue","orange","pink", "yellow") ) 
 
 ```
 
-
-```{r}
 #9. Utwórz wykres kołowy dla danych w poprzedniego zadania.
+```{r}
+
+wino<-read.table(file="C:\\Users\\barto\\Desktop\\wine_red.csv", sep=";", dec=".",header=TRUE)
 wykres<-wino%>%
   group_by(quality)%>%
   summarise(liczba=n())
 pie(wykres$liczba, wykres$quality)
 ```
-```{r}
 #10. Utwórz funkcję o nazwie zloty_euro, która obliczy, ile złotych można dostać przy wymianie 1346,89 EURO i zwróci odpowiedź: „Za (podana wartość) EURO otrzymasz (wyliczona wartość) złotych)”. Wyliczona wartość ma być zaokrąglona do 2 miejsc po przecinku. Zadanie wymaga sprawdzenia aktualnego kursu walut.
-
+```{r}
 zloty_eu=function(euro,zloty){
   cat(paste("Za", euro, "EURO otrzymasz", euro*zloty, "złotych"))
 }
 zloty_eu(1346.89, 4.7)
 ```
 
-
-```{r}
 #11. Napisz program, który sprawdzi, czy liczba jest parzysta. Przy spełnieniu tego warunku podzieli tę liczbę przez 2 i poda odpowiedź, a w przeciwnym razie wyświetli komunikat: „Błąd! Liczba jest nieparzysta”
+```{r}
+
 czy_Parzysta=function(liczba){
   if(liczba%%2==0){
     
@@ -206,6 +237,7 @@ czy_Parzysta=function(liczba){
 }
 czy_Parzysta(8989)
 ```
+
 
 
 
