@@ -78,6 +78,124 @@ czyNieparzysta(11)
 
 ```
 
+---
+title: Wino
+output: html_notebook
+---
+
+
+```{r}
+#1. Utwórz wektor i nazwij go swoim nazwiskiem. Przypisz do niego następujące wartości: 23,12, 49, 9, -4, 51, 83. Wyświetl zakres wektora, jego długość, a także najmniejszą i największą wartość.
+
+pulczynski=c(23,12, 49, 9, -4, 51, 83) #za mopomąca funkcji c() tworzymy wektor 
+pulczynski                         # wypisujemy wektor
+length(pulczynski)             # długość wektora
+min(pulczynski)                # najmniejsza wartość.
+max(pulczynski)               #  największa wartość
+```
+
+
+```{r}
+# 2. Utwórz listę i nazwij ją desery. Przypisz do niej nazwę ciasta (szarlotka), jego liczbę kalorii w 100 g (265 kcal) i informację o zawartości cynamonu (prawda). Wyświetl informację o liczbie kalorii. Usuń kategorię dotyczącą zawartości cynamonu. Dodaj kategorię dodatki i zapisz do niej lody waniliowe. 
+
+desery=list(ciasta="szarlotka", liczbe_kalorii="w 100g 265kcal", zawartosc_cynamonu=TRUE)
+desery$liczbe_kalorii             # za pomocą $ odwoluje się do liczba_kalorij i wwyświetlam informacje 
+desery$zawartosc_cynamonu=NULL    #usuwam kategorię dotyczącą zawartości cynamonu
+desery$dodatki="lody waniliowe"   # dodaje nową kategorjie do listy 
+desery                            # wypisuje liste dla sprawdzania 
+```
+
+
+```{r}
+#3. Wczytaj dołączony plik wine_red.csv do obiektu o nazwie wino.
+#pakiety potrzebne do przetwarzania danych
+#install.packages("dplyr")
+#install.packages("tidry")
+
+wino<-read.table(file="C:/.../winequality-red.csv", sep=",", dec=".",header=TRUE) #Wczytaj dołączony plik
+#4 
+names(wino)     #nazwy kolumn dla ramki danych wino
+head(wino,4)     #4 pierwsze wiersze ramki danych wino
+select(wino,pH) #kolumnę pH z ramki danych wino
+
+sulfur<-wino%>%     #informację, czy wartości z kolumny „total.sulfur.dioxide” są większe od 40.
+  mutate(większa_od_40=if_else(total.sulfur.dioxide>40, "tak", "nie")) #dodaje nową kolumne gdzie zapiszę tak nie jeżeli zawartość total.sulfur.dioxide>40
+sulfur
+
+```
+
+
+```{r}
+#5. Oblicz średni poziom alkoholu w winach z ramki danych wino
+
+srednia<-wino%>%            
+summarise(mean(alcohol))
+srednia
+
+```
+```{r}
+#6. Posortuj dane według podanych instrukcji, wykorzystują odpowiednie funkcje.
+#Uporządkuj dane z kolumny „residual.sugar” (średni wynik) według zawartości wody (kolumna "citric.acid”)
+wino%>%
+  group_by(citric.acid,residual.sugar)%>%
+  summarise(liczba=n())
+#Uporządkuj dane z obiektu owoce według kolumny „chlorides”
+wino%>%
+  group_by(chlorides)%>%
+  summarise(liczba=n())
+# arrange(chlorides) ???
+  
+```
+
+
+```{r}
+#7. Wyświetl liczebność win według danych z kolumny „quality”.
+wino%>%
+  group_by(quality)%>%
+  summarise(liczba=n()) 
+
+```
+```{r}
+#8. Przygotuj wykres kolumnowy przedstawiający dane z kolumny „quality”. Wstaw tytuł wykresu, nazwij osie,ustaw różne kolory dla poszczególnych słupków.
+wykres<-wino%>%
+  group_by(quality)%>%
+  summarise(liczba=n()) 
+barplot(wykres$liczba, main = "Quality", ylab= "Ilosć", names.arg=c(wykres$quality), col=c("red", "green", "blue","orange","pink", "yellow") ) 
+
+```
+
+
+```{r}
+#9. Utwórz wykres kołowy dla danych w poprzedniego zadania.
+wykres<-wino%>%
+  group_by(quality)%>%
+  summarise(liczba=n())
+pie(wykres$liczba, wykres$quality)
+```
+```{r}
+#10. Utwórz funkcję o nazwie zloty_euro, która obliczy, ile złotych można dostać przy wymianie 1346,89 EURO i zwróci odpowiedź: „Za (podana wartość) EURO otrzymasz (wyliczona wartość) złotych)”. Wyliczona wartość ma być zaokrąglona do 2 miejsc po przecinku. Zadanie wymaga sprawdzenia aktualnego kursu walut.
+
+zloty_eu=function(euro,zloty){
+  cat(paste("Za", euro, "EURO otrzymasz", euro*zloty, "złotych"))
+}
+zloty_eu(1346.89, 4.7)
+```
+
+
+```{r}
+#11. Napisz program, który sprawdzi, czy liczba jest parzysta. Przy spełnieniu tego warunku podzieli tę liczbę przez 2 i poda odpowiedź, a w przeciwnym razie wyświetli komunikat: „Błąd! Liczba jest nieparzysta”
+czy_Parzysta=function(liczba){
+  if(liczba%%2==0){
+    
+    cat(paste("jeat parzysta, i podzielona przez dwa:", liczba/2))
+  }else{cat(paste("Błąd! Liczba jest nieparzysta"))
+  }
+}
+czy_Parzysta(8989)
+```
+
+
+
 
 
 # LAB4
