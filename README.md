@@ -1,69 +1,82 @@
 # rrr
 rrr
 
-```{r}
+
 #1 Utwórz wektor i nazwij go zarobki. Przypisz do niego następujące wartości: 2300, 1800, 4500, 3700, 1300, 7200, 6100. Nazwij każdy element wektora dowolnym imieniem. Wyświetl wektor z nazwanymi elementami, najmniejszą wartość, jego długość i oblicz średnią wartość.
+```{r}
 zarobki <- c(jan=2300, tomek=1800, maciek=4500, grzegorz=3700, bartek=1300, kacper=7200, janusz=6100)
 zarobki
 min(zarobki)
 length(zarobki)
 mean(zarobki)
-
+```
 #2 Wczytaj dołączony plik Hotel_booking_satisfaction.csv do obiektu o nazwie hotele.  Wyświetl utworzony obiekt hotele.
+```{r}
 hotele <- read.table(file="C:\\Users\\barto\\Desktop\\europa_hotel.csv", sep=",", dec=".",header=TRUE)
 hotele
-
+```
 #3 Z ramki danych hotele wyświetl: •3 pierwsze wiersze, •3 ostatnie wiersze, •nazwy wszystkich kolumn.
+```{r}
 head(hotele,3)
 tail(hotele,3)
 names(hotele)
-
+```
 #4 Wyświetl dane dla kolumny „Gender” z obiektu hotele.
+```{r}
 gener <- hotele %>%
   select(Gender)
 gener
-
+```
 #5 Wyświetl informację, czy wartości z kolumny „Cleanliness” są równe bądź większe od 3.
+```{r}
 clean <- hotele %>%
     mutate(isCleanliness=if_else(Cleanliness>=3,"tak","nie"))
 clean
-
+```
 #6 Oblicz średni wynik dla kolumny „Food.and.drink” i zaokrąglij go do dwóch miejsc po przecinku.
+```{r}
 sredni <- hotele %>%
   summarise(sredni_wynik=round(mean(Food.and.drink),2))
 sredni
-
+```
 #7 Uporządkuj dane według kolumny „pupose_of_travel”.
+```{r}
 uporz <- hotele %>%
   arrange(purpose_of_travel)
 uporz
-
+```
 #8 Wyświetl liczebność według danych z kolumny „Type.Of.Booking” i zapisz to do wektora, który nazwiesz swoim nazwiskiem.
+```{r}
 wektor<-hotele%>%
   group_by(Type.Of.Booking)%>%
  summarise(liczba=n())%>%
   select(liczba)
 pulczynski=c(wektor)
 pulczynski
-
+```
 #9 Przygotuj wykres kolumnowy przedstawiający liczebność danych z kolumny „Stay.comfort”. Wstaw tytuł wykresu, nazwij osie, ustaw różne kolory dla poszczególnych słupków. Wygeneruj plik graficzny z wykresem.
+```{r}
 wykres<-hotele%>%
   group_by(Stay.comfort)%>%
  summarise(liczba=n())
 wykres
 barplot(wykres$liczba, main = "Stay.comfort", ylab="responses", ylim = c(0,35000),col=c("red", "green", "blue","orange","pink", "yellow"), names.arg = c("0","1","2","3","4","5") )
+```
 #10 W nazwach kolumn w obiekcie hotele zamień „.” na „_”, wykorzystując funkcję gsub.
+```{r}
 colnames(hotele) <- gsub("\\.+", "_", colnames(hotele))
 hotele
-
+```
 #11 Utwórz funkcję o nazwie podatek, która obliczy, ile podatku należy zapłacić od podanego towaru i zwróci odpowiedź: „Od (podana wartość) złotych należy zapłacić (wyliczona wartość) złotych podatku”. Wyliczona wartość ma być zaokrąglona do 2 miejsc po przecinku. Przyjmij, że podatek wynosi 13%.
+```{r}
 podatek <- function(kwota)
 {
   print(paste("Od ",kwota," złotych należy zapłacić ", round(kwota*0.13,2)," złotych podatku."))
 }
 podatek(100)
-
+```
 #12 Napisz program, który sprawdzi, czy liczba jest nieparzysta. Przy spełnieniu tego warunku od podanej wartości odejmie 3i poda odpowiedź, a w przeciwnym razie wyświetli komunikat: „Uwaga! Liczba jest parzysta”.
+```{r}
 czyNieparzysta <- function(liczba)
 {
   if(liczba%%2==0)
@@ -75,8 +88,8 @@ czyNieparzysta <- function(liczba)
 }
 czyNieparzysta(10)
 czyNieparzysta(11)
-
 ```
+
 
 ---
 title: Wino
